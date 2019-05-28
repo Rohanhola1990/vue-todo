@@ -1,29 +1,47 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
+    <div class="inBody">
+      <app-header></app-header>
+      <app-body></app-body>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import HelloWorld from "./components/HelloWorld.vue";
+import Header from './components/HeaderComponent.vue'
+import Body from './components/BodyComponent.vue'
 
-export default Vue.extend({
+export default {
   name: "app",
   components: {
-    HelloWorld
+    'app-header': Header,
+    'app-body': Body
+  },
+  data() {
+    return {
+      todos: [],
+      index: 0
+    }
   }
-});
+};
 </script>
 
 <style>
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,700');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  outline: none;
+}
+body {
+  background-color: #eeeeee;
+  font-family: 'Montserrat', sans-serif;
+}
+.inBody {
+    margin: 30px auto;
+    width: 100%;
+    max-width: 420px;
 }
 </style>
