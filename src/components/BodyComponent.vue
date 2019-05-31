@@ -1,14 +1,14 @@
 <template>
-    <div class="todo_body">
+    <div class="todo_body" v-show="headerState">
         <form @submit.prevent="addTodo">
-            <input autocomplete="off" type="text" v-validate="'min:5'" name="todoName" v-model="todo" placeholder="What are you planning to do?">
+            <input autocomplete="off" type="text" v-validate="'required|min:5'" name="todoName" v-model="todo" placeholder="What are you planning to do?">
         </form>
         <div name="list" class="listTodos">
             <transition-group enter-active-class="animated bounceInUp" leave-active-class="animated bounceOutDown">
                 <div class="todo_e" v-for="(data, index) in todos" :key="index" v-bind:class="{complete: data.completed}">
                     {{ data.todo }}
 
-                    <a href="javascript:void(0)" @click="data.completed = !data.completed">
+                    <a href="javascript:void(0)" @click="callTo(data, index)">
                         <i class="fa fa-check-circle" v-if="data.completed === false"></i>
                         <i class="fa fa-window-close" v-if="data.completed === true"></i>
                     </a>
@@ -20,10 +20,14 @@
 
 <script>
 export default {
+    props: {
+        headerState : false
+    },
     data() {
         return {
             todo: '',
-            todos: []
+            todos: [],
+            status: ''
         }
     },
     methods: {
@@ -40,12 +44,23 @@ export default {
                     console.log('Not Valid');
                 }
             })
+        },
+        callTo(valDown, id){
+            if(!valDown.completed) {
+                valDown.completed = true
+            }
+            else {
+                this.todos.splice(id,1)
+            }
         }
     },
     computed: {
         completeClass() {
             this.classComplete = !this.classComplete;
         }
+    },
+    mounted() {
+        console.log(this.headerState);
     }
 }
 </script>
@@ -73,6 +88,10 @@ export default {
         border-bottom: 1px solid #ccc;
         color: #333;
         padding: 0 5px;
+        transition: all ease 0.4s;
+    }
+    input:focus {
+        border-bottom-color: #333;
     }
     .todo_e {
         background: #f0f0f0;
@@ -88,18 +107,6 @@ export default {
     }
     .todo_e:nth-child(even) {
         background-color: #fff;
-    }
-    .todo_e:after {
-        position: absolute;
-        left: 5px;
-        right: 40px;
-        bottom: 0;
-        opacity: 0;
-        background-color: #333;
-        transition: all ease 0.4s;
-        content: '';
-        height: 2px;
-        margin-bottom: -2px;
     }
     .todo_e a {
         display: inline-flex;
@@ -118,10 +125,6 @@ export default {
     }
     .todo_e.complete a {
         pointer-events: all;
-    }
-    .todo_e.complete:after{
-        bottom: 50%;
-        opacity: 1;
     }
     .todo_e.complete a {
         color: #333;

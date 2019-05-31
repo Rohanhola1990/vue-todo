@@ -1,7 +1,7 @@
 <template>
     <div class="header">
         <div v-if="showinput" class="enterName" @keypress.13="activateButton">
-            <input type="text" v-model="username" v-if="showinput" name="name" placeholder="Enter your name to begin...">
+            <input v-validate="'required|min:5'" type="text" v-model="username" v-if="showinput" name="name" placeholder="Enter your name to begin...">
             <input type="button" value="Submit" v-if="username" @click="activateButton">
         </div>
         <div class="showHeader" v-show="nameState">
@@ -27,9 +27,19 @@ export default {
         startList() {
             this.nameState = true
         },
-        activateButton() {
-            this.nameState = true
-            this.showinput = false
+        activateButton(event) {
+            this.$validator.validateAll().then((result) => {
+                if(result) {
+                    this.username = this.username
+                    this.nameState = true
+                    this.showinput = false
+
+                    this.$emit('rebaseValueheader', this.nameState)
+                }
+                else {
+                    console.log('Not Valid');
+                }
+            })
         }
     }
 }

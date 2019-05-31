@@ -1,8 +1,12 @@
 <template>
   <div id="app">
     <div class="inBody">
-      <app-header></app-header>
-      <app-body></app-body>
+      <app-header
+        v-on:rebaseValueheader="valueHeader"
+      ></app-header>
+      <app-body
+        :headerState="headerStatus"
+      ></app-body>
     </div>
   </div>
 </template>
@@ -19,8 +23,13 @@ export default {
   },
   data() {
     return {
-      todos: [],
-      index: 0
+      headerStatus: false
+    }
+  },
+  methods: {
+    valueHeader(value) {
+      this.headerStatus = value
+      console.log('Header Value Received')
     }
   }
 };
